@@ -1,4 +1,4 @@
-# HackSim V2 - A Hacker Simulation Game / เกมจำลองการแฮ็ก
+# HackSim - A Hacker Simulation Game / เกมจำลองการแฮ็ก
 
 Welcome to **HackSim V2**, a text-based hacking simulation where you must infiltrate a system by bypassing firewalls, cracking passwords, and analyzing security protocols. Test your skills in a simulated environment, but beware—the AI is constantly adapting to your moves!
 
@@ -10,7 +10,7 @@ Welcome to **HackSim V2**, a text-based hacking simulation where you must infilt
 
 HackSim V2 is a hacker simulation game built in Lua, where you play as a hacker trying to break through a firewall. You must scan, analyze, and modify firewall codes while avoiding traps and counter-hacks from the AI. The game features commands like `scan`, `brute-force`, `bypass`, and `modify-code`, and the AI continuously learns from your actions.
 
-เกมจำลองการแฮ็ก HackSim V2 เขียนในภาษา Lua ซึ่งคุณจะรับบทเป็นแฮ็กเกอร์ที่พยายามเจาะไฟร์วอลล์ คุณจะต้องสแกน, วิเคราะห์, และปรับแก้รหัสไฟร์วอลล์ ในขณะเดียวกันก็ต้องหลีกเลี่ยงกับดักและการโจมตีจาก AI เกมนี้มีคำสั่งต่างๆ เช่น `scan`, `brute-force`, `bypass`, และ `modify-code` และ AI จะเรียนรู้จากการกระทำของคุณตลอดเวลา
+เกมจำลองการแฮ็ก HackSim เขียนในภาษา Lua ซึ่งคุณจะรับบทเป็นแฮ็กเกอร์ที่พยายามเจาะไฟร์วอลล์ คุณจะต้องสแกน, วิเคราะห์, และปรับแก้รหัสไฟร์วอลล์ ในขณะเดียวกันก็ต้องหลีกเลี่ยงกับดักและการโจมตีจาก AI เกมนี้มีคำสั่งต่างๆ เช่น `scan`, `brute-force`, `bypass`, และ `modify-code` และ AI จะเรียนรู้จากการกระทำของคุณตลอดเวลา
 
 The game includes:
 - A firewall code that changes during the game.
@@ -40,7 +40,7 @@ To get started, follow these steps:
      - **Linux (Arch)**: `sudo pacman -S lua`
      - **Windows**: Follow the instructions on the Lua website.
 
-2. **Clone or download HackSim V2**:
+2. **Clone or download HackSim**:
    - Clone the repository using Git:
      ```bash
      git clone https://github.com/bunnyhop-dev/hacksim3000
@@ -55,7 +55,7 @@ To get started, follow these steps:
      lua hacksim.lua
      ```
 
-ติดตั้งเกม HackSim V2 ดังนี้:
+ติดตั้งเกม HackSim ดังนี้:
 
 1. **ติดตั้ง Lua** (หากยังไม่ได้ติดตั้ง):
    - ดาวน์โหลด Lua ได้ที่ [https://www.lua.org/download.html](https://www.lua.org/download.html)
@@ -65,7 +65,7 @@ To get started, follow these steps:
      - **Linux (Arch)**: `sudo pacman -S lua`
      - **Windows**: ตามคำแนะนำบนเว็บไซต์ Lua
 
-2. **Clone หรือดาวน์โหลด HackSim V2**:
+2. **Clone หรือดาวน์โหลด HackSim**:
    - Clone โค้ดจาก GitHub โดยใช้คำสั่ง:
      ```bash
      git clone https://github.com/bunnyhop-dev/hacksim3000
@@ -106,7 +106,19 @@ Your goal is to either:
 
 ## 🧑‍💻 ChangeLog / ประวัติการเปลี่ยนแปลง
 
-### V2.0 (Current Version)
+### V2.1 Enchance Edition (Current Version)
+- Add Story mode and Sandbox mode
+- Add display status
+- Add more command
+- Add player resources
+- Upgrade AI, AI learning rate
+- Fixed bugs
+### [Story mode]
+- Player will start game with a mission and recive a reward
+### [Sandbox mode]
+- Freedom mode
+
+### V2.0
 - Added AI defense and counter-hack system that learns from player actions.
 - New `scan`, `analyze`, `brute-force`, `bypass`, and `modify-code` commands.
 - AI now detects scanning patterns and responds with counterattacks (e.g., blocking access, changing password).
@@ -114,7 +126,19 @@ Your goal is to either:
 - Added the concept of limited attempts to prevent over-scanning or brute-forcing.
 - Introduced a reward system
 
-### V2.0 (เวอร์ชันปัจจุบัน)
+### V2.1 Enchance Edition (เวอร์ชั่นปัจจุบัน)
+- เพิ่มโหมดเนื้อเรื่อง และ โหมดSandbox
+- เพิ่มแสดงสถานะของระบบ
+- เพิ่มคำสั่งใหม่
+- เพิ่มทรัพยากรของผู้เล่น
+- อัปเกรดAI และ การเรียนรู้ของAI
+- แก้ไขบัก
+### [โหมดเนื้อเรื่อง]
+- ผู้เล่นจะเริ่มเกมโดยการทำภารกิจ เพื่อรับรางวัล
+### [โหมดSandbox]
+- โหมดอิสระ
+
+### V2.0
 - เพิ่มระบบการป้องกัน AI และการโจมตีตอบโต้ที่เรียนรู้จากการกระทำของผู้เล่น
 - เพิ่มคำสั่งใหม่ `scan`, `analyze`, `brute-force`, `bypass`, และ `modify-code`
 - AI สามารถตรวจจับรูปแบบการสแกนและตอบโต้ด้วยการโจมตี (เช่น การบล็อกการเข้าถึง, เปลี่ยนรหัสผ่าน)
