@@ -91,7 +91,7 @@ Once the game starts, you'll have a few seconds to complete the mission before t
 1. **`scan`**: Scan the system for potential vulnerabilities. / สแกนระบบเพื่อหาจุดอ่อน
 2. **`analyze`**: Analyze the firewall code (must scan first!). / วิเคราะห์รหัสไฟร์วอลล์ (ต้องสแกนก่อน!)
 3. **`brute-force`**: Guess the firewall password. / เดารหัสผ่านของไฟร์วอลล์
-4. **`bypass`**: Try bypassing the firewall if it’s weak. / พยายามข้ามไฟร์วอลล์หากมันอ่อนแอ
+4. **`bypass`**: Try bypassing the firewall if it's weak. / พยายามข้ามไฟร์วอลล์หากมันอ่อนแอ
 5. **`modify-code`**: Attempt to modify the firewall code. / พยายามแก้ไขรหัสไฟร์วอลล์
 
 Your goal is to either:
@@ -106,7 +106,22 @@ Your goal is to either:
 
 ## 🧑‍💻 ChangeLog / ประวัติการเปลี่ยนแปลง
 
-### V2.1 Enchance Edition (Current Version)
+### V2.2 Enchance Edition (Current Version)
+- Added Level and Experience system
+- Added Skills and Skill Points system
+- Added Inventory and Tools system
+- Added diverse Environments
+- Added Achievements system
+- Enhanced AI system
+- New commands: inventory, upgrade, achievements
+### [New Systems]
+- Level System: Players gain EXP and level up from completing missions
+- Skills System: Upgrade various abilities like Scan Efficiency, Resource Management
+- Tools System: Special hacking tools like Firewall Bypass Tool, AI Jammer
+- Environments: Various systems to hack like Bank Security, Satellite Control
+- Achievements: Special accomplishments and rewards
+
+### V2.1 Enchance Edition
 - Add Story mode and Sandbox mode
 - Add display status
 - Add more command
@@ -126,7 +141,28 @@ Your goal is to either:
 - Added the concept of limited attempts to prevent over-scanning or brute-forcing.
 - Introduced a reward system
 
-### V2.1 Enchance Edition (เวอร์ชั่นปัจจุบัน)
+### V1.0 (Initial Version)
+- Basic firewall system with one password to crack.
+- Introduced basic commands (`scan`, `bruteforce`, `connect`, `upload payload`).
+- Firewall lockdown after failed attempts.
+- Simple game flow and interactions.
+
+### V2.2 Enchance Edition (เวอร์ชันปัจจุบัน)
+- เพิ่มระบบ Level และ Experience
+- เพิ่มระบบ Skills และ Skill Points
+- เพิ่มระบบ Inventory และ Tools
+- เพิ่มระบบ Environments ที่หลากหลาย
+- เพิ่มระบบ Achievements
+- เพิ่มระบบ AI ที่ฉลาดขึ้น
+- เพิ่มคำสั่งใหม่: inventory, upgrade, achievements
+### [ระบบใหม่]
+- ระบบ Level: ผู้เล่นจะได้รับ EXP และเลเวลอัพจากการทำภารกิจ
+- ระบบ Skills: อัพเกรดความสามารถต่างๆ เช่น Scan Efficiency, Resource Management
+- ระบบ Tools: เครื่องมือพิเศษที่ช่วยในการแฮก เช่น Firewall Bypass Tool, AI Jammer
+- ระบบ Environments: สภาพแวดล้อมที่หลากหลาย เช่น ระบบธนาคาร, ระบบดาวเทียม
+- ระบบ Achievements: ความสำเร็จและรางวัลพิเศษ
+
+### V2.1 Enchance Edition
 - เพิ่มโหมดเนื้อเรื่อง และ โหมดSandbox
 - เพิ่มแสดงสถานะของระบบ
 - เพิ่มคำสั่งใหม่
@@ -146,11 +182,7 @@ Your goal is to either:
 - เพิ่มแนวคิดของการจำกัดจำนวนครั้งในการสแกนหรือเดารหัสผ่าน
 - เพิ่มระบบรางวัล
 
-### V1.0 (Initial Version)
-- Basic firewall system with one password to crack.
-- Introduced basic commands (`scan`, `bruteforce`, `connect`, `upload payload`).
-- Firewall lockdown after failed attempts.
-- Simple game flow and interactions.
+
 
 ### V1.0 (เวอร์ชันแรก)
 - ระบบไฟร์วอลล์พื้นฐานที่มีรหัสผ่านเดียวให้เดา

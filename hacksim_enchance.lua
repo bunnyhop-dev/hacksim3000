@@ -8,7 +8,7 @@ local initial_firewall_code = math.random(1000, 9999)
 local firewall_code = initial_firewall_code
 local ai_defense = 0
 local attempts = 5
-local command = {"scan", "analyze", "brute-force", "bypass", "modify-code", "status", "reset"}
+local command = {"scan", "analyze", "brute-force", "bypass", "modify-code", "status", "reset", "inventory", "upgrade", "achievements"}
 local trap_codes = {}
 local scan_counter = 0
 local analyze_used = false
@@ -20,6 +20,108 @@ local scan_range = 7
 local ai_learning_rate = 0.1
 local difficulty = 1 
 local game_mode = "story" -- default mode bro 
+
+-- New Systems
+local player = {
+    level = 1,
+    exp = 0,
+    skill_points = 0,
+    skills = {
+        scan_efficiency = 0,
+        resource_management = 0,
+        analysis_accuracy = 0,
+        stealth = 0,
+        ai_resistance = 0
+    },
+    inventory = {},
+    achievements = {},
+    story_progress = 1,
+    reputation = 0
+}
+
+local tools = {
+    firewall_bypass = {
+        name = "Firewall Bypass Tool",
+        description = "Bypass firewall without triggering alarms",
+        uses = 3,
+        cost = 150
+    },
+    ai_jammer = {
+        name = "AI Jammer",
+        description = "Temporarily disable AI defense",
+        uses = 2,
+        cost = 200
+    },
+    data_scanner = {
+        name = "Advanced Data Scanner",
+        description = "Increase scan accuracy by 50%",
+        uses = 5,
+        cost = 100
+    }
+}
+
+local environments = {
+    bank = {
+        name = "Bank Security System",
+        description = "High-security banking network with multiple layers of protection",
+        special_mechanisms = {"vault_encryption", "transaction_monitoring"},
+        difficulty = 4
+    },
+    satellite = {
+        name = "Satellite Control System",
+        description = "Orbital defense network with limited access windows",
+        special_mechanisms = {"orbital_tracking", "signal_jamming"},
+        difficulty = 5
+    },
+    corporate = {
+        name = "Corporate Network",
+        description = "Enterprise-level security with active monitoring",
+        special_mechanisms = {"employee_tracking", "data_encryption"},
+        difficulty = 3
+    }
+}
+
+local achievements = {
+    first_hack = {
+        name = "First Steps",
+        description = "Complete your first successful hack",
+        reward = 100,
+        completed = false
+    },
+    speed_demon = {
+        name = "Speed Demon",
+        description = "Complete a mission in under 2 minutes",
+        reward = 200,
+        completed = false
+    },
+    master_hacker = {
+        name = "Master Hacker",
+        description = "Reach level 10",
+        reward = 500,
+        completed = false
+    }
+}
+
+local ai_personalities = {
+    aggressive = {
+        name = "Aggressive AI",
+        description = "Focuses on direct counter-attacks",
+        learning_rate = 0.2,
+        defense_pattern = "offensive"
+    },
+    defensive = {
+        name = "Defensive AI",
+        description = "Prioritizes system protection",
+        learning_rate = 0.1,
+        defense_pattern = "defensive"
+    },
+    adaptive = {
+        name = "Adaptive AI",
+        description = "Learns from player's tactics",
+        learning_rate = 0.3,
+        defense_pattern = "mixed"
+    }
+}
 
 -- Story Mode
 local story_mission = 1
@@ -56,8 +158,145 @@ local story_missions = {
   },
 }
 
+-- New System Functions
+local function gain_exp(amount)
+    player.exp = player.exp + amount
+    local exp_needed = player.level * 100
+    if player.exp >= exp_needed then
+        player.level = player.level + 1
+        player.skill_points = player.skill_points + 1
+        player.exp = player.exp - exp_needed
+        print("\n*** Level Up! You are now level " .. player.level .. " ***")
+        print("You gained 1 skill point!")
+    end
+end
+
+local function check_achievements()
+    if not achievements.first_hack.completed and hacked then
+        achievements.first_hack.completed = true
+        resources = resources + achievements.first_hack.reward
+        print("\n*** Achievement Unlocked: " .. achievements.first_hack.name .. " ***")
+        print("Reward: " .. achievements.first_hack.reward .. " resources")
+    end
+    
+    if not achievements.master_hacker.completed and player.level >= 10 then
+        achievements.master_hacker.completed = true
+        resources = resources + achievements.master_hacker.reward
+        print("\n*** Achievement Unlocked: " .. achievements.master_hacker.name .. " ***")
+        print("Reward: " .. achievements.master_hacker.reward .. " resources")
+    end
+end
+
+local function display_inventory()
+    print("\n=== Inventory ===")
+    if #player.inventory == 0 then
+        print("Your inventory is empty")
+    else
+        for _, item in ipairs(player.inventory) do
+            print(item.name .. " - " .. item.description)
+            print("Uses remaining: " .. item.uses)
+        end
+    end
+    print("----------------")
+end
+
+local function use_tool(tool_name)
+    for i, item in ipairs(player.inventory) do
+        if item.name == tool_name then
+            if item.uses > 0 then
+                item.uses = item.uses - 1
+                if item.name == "Firewall Bypass Tool" then
+                    ai_defense = math.max(0, ai_defense - 3)
+                    print("\nFirewall temporarily weakened!")
+                elseif item.name == "AI Jammer" then
+                    ai_learning_rate = 0
+                    print("\nAI temporarily disabled!")
+                elseif item.name == "Advanced Data Scanner" then
+                    scan_range = scan_range + 2
+                    print("\nScan range increased!")
+                end
+                if item.uses == 0 then
+                    table.remove(player.inventory, i)
+                end
+                return true
+            else
+                print("\nThis tool has no uses remaining!")
+                return false
+            end
+        end
+    end
+    print("\nTool not found in inventory!")
+    return false
+end
+
+local function display_skills()
+    print("\n=== Skills ===")
+    print("Skill Points: " .. player.skill_points)
+    print("\nAvailable Skills:")
+    print("1. Scan Efficiency (Level " .. player.skills.scan_efficiency .. ")")
+    print("2. Resource Management (Level " .. player.skills.resource_management .. ")")
+    print("3. Analysis Accuracy (Level " .. player.skills.analysis_accuracy .. ")")
+    print("4. Stealth (Level " .. player.skills.stealth .. ")")
+    print("5. AI Resistance (Level " .. player.skills.ai_resistance .. ")")
+    print("----------------")
+end
+
+local function upgrade_skill(skill_name)
+    if player.skill_points > 0 then
+        if player.skills[skill_name] < 5 then
+            player.skills[skill_name] = player.skills[skill_name] + 1
+            player.skill_points = player.skill_points - 1
+            
+            -- Apply skill effects
+            if skill_name == "scan_efficiency" then
+                scan_range = scan_range + 1
+            elseif skill_name == "resource_management" then
+                resources = resources + 50
+            elseif skill_name == "analysis_accuracy" then
+                analyze_used = false
+            elseif skill_name == "stealth" then
+                scan_counter = math.max(0, scan_counter - 1)
+            elseif skill_name == "ai_resistance" then
+                ai_defense = math.max(0, ai_defense - 1)
+            end
+            
+            print("\nSkill upgraded successfully!")
+        else
+            print("\nThis skill is already at maximum level!")
+        end
+    else
+        print("\nNot enough skill points!")
+    end
+end
+
+local function display_achievements()
+    print("\n=== Achievements ===")
+    for id, achievement in pairs(achievements) do
+        local status = achievement.completed and "✓" or "✗"
+        print(status .. " " .. achievement.name)
+        print("   " .. achievement.description)
+        print("   Reward: " .. achievement.reward .. " resources")
+    end
+    print("----------------")
+end
+
+local function select_environment()
+    print("\nSelect Environment:")
+    for id, env in pairs(environments) do
+        print(id .. ". " .. env.name)
+        print("   " .. env.description)
+        print("   Difficulty: " .. env.difficulty)
+    end
+    io.write("\n> ")
+    local choice = io.read()
+    return environments[choice]
+end
+
 local function display_status()
   print("\n=== System Status ===")
+  print("Level: " .. player.level)
+  print("Experience: " .. player.exp .. "/" .. (player.level * 100))
+  print("Skill Points: " .. player.skill_points)
   print("Attempts remaining: " .. attempts)
   print("AI Defense Level: " .. ai_defense)
   print("Firewall Code: " .. firewall_code)
@@ -65,9 +304,10 @@ local function display_status()
   print("Scan Range: " .. scan_range)
   print("Bypass Level: " .. bypass_level)
   print("Difficulty: " .. difficulty)
+  print("Reputation: " .. player.reputation)
 
   if game_mode == "story" then
-    print("Mission: " .. story_missions[story_mission].title)
+    print("\nMission: " .. story_missions[story_mission].title)
     print(story_missions[story_mission].description)
   end
   print("--------------------\n")
@@ -235,7 +475,7 @@ function handle_reset()
 end
 
 local function select_game_mode()
-  print("Welcome to HackSim: Enchance Edition\n[V] 2.1")
+  print("Welcome to HackSim: Enchance Edition\n[V] 2.2")
   print("\nSelect Game Mode:")
   print("[1] Story Mode")
   print("[2] Sandbox Mode")
@@ -257,7 +497,7 @@ local function select_game_mode()
     os.execute('clear')
     game_mode = "sandbox"
     print("\n--- Sandbox Mode ---")
-    print("GNU Linux V 2.1\nType 'help' for command list.\n")
+    print("GNU Linux V 2.2\nType 'help' for command list.\n")
     attempts = 5
     resources = 100
     ai_defense = 0 
@@ -274,6 +514,50 @@ local function select_game_mode()
     ai_defense = story_missions[story_mission].initial_ai_defense
     difficulty = story_missions[story_mission].difficulty
   end
+end
+
+local function handle_command(cmd)
+    if cmd == "scan" then
+        handle_scan()
+    elseif cmd == "analyze" then
+        handle_analyze()
+    elseif cmd == "brute-force" then
+        handle_brute_force()
+    elseif cmd == "bypass" then
+        handle_bypass()
+    elseif cmd == "modify-code" then
+        handle_modify_code()
+    elseif cmd == "status" then
+        display_status()
+    elseif cmd == "reset" then
+        handle_reset()
+    elseif cmd == "inventory" then
+        display_inventory()
+    elseif cmd == "upgrade" then
+        display_skills()
+        print("\nEnter skill number to upgrade (1-5):")
+        io.write("> ")
+        local skill_choice = io.read()
+        local skill_map = {
+            ["1"] = "scan_efficiency",
+            ["2"] = "resource_management",
+            ["3"] = "analysis_accuracy",
+            ["4"] = "stealth",
+            ["5"] = "ai_resistance"
+        }
+        if skill_map[skill_choice] then
+            upgrade_skill(skill_map[skill_choice])
+        else
+            print("\nInvalid skill choice!")
+        end
+    elseif cmd == "achievements" then
+        display_achievements()
+    else
+        print("\nUnknown command. Available commands:")
+        for _, c in ipairs(command) do
+            print("- " .. c)
+        end
+    end
 end
 
 -- Main game
@@ -295,31 +579,14 @@ while not game_over do
     print("modify-code  | Attempt to change the firewall code (cost: 40 resources)")
     print("status       | Display current game status")
     print("reset        | Reset the game to the beginning")
-    print("clear/cls    | Clear Terminal screen\n")
+    print("inventory    | Display your inventory and tools")
+    print("upgrade      | Upgrade your hacking skills")
+    print("achievements | View your achievements and rewards")
+    print("clear/cls    | Clear Terminal screen")
+    print("exit         | Exit the game\n")
 
   elseif cmd == "clear" or cmd == "cls" then
     os.execute('clear' or 'cls')
-
-  elseif cmd == "scan" then
-    handle_scan()
-
-  elseif cmd == "analyze" then
-    handle_analyze()
-
-  elseif cmd == "brute-force" then
-    handle_brute_force()
-
-  elseif cmd == "bypass" then
-    handle_bypass()
-
-  elseif cmd == "modify-code" then
-    handle_modify_code()
-
-  elseif cmd == "status" then
-    display_status()
-
-  elseif cmd == "reset" then
-    handle_reset()
 
   elseif cmd == "" then
     -- nothing here :P
@@ -329,7 +596,7 @@ while not game_over do
     os.exit()
 
   else
-    print("bash: " .. cmd .. ": command not found")
+    handle_command(cmd)
   end
 
   if math.random() < ai_learning_rate then
